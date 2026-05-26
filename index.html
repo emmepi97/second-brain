@@ -9,7 +9,7 @@
   <!-- Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 
   <style>
     :root{
@@ -45,11 +45,16 @@
       overflow-x:hidden;
     }
 
-    a{color:inherit}
     .container{
       width:min(var(--maxw), calc(100% - 32px));
       margin: 0 auto;
-      padding: 24px 0 56px;
+      padding: 18px 0 24px;
+      min-height: 100vh;
+
+      /* 🔑 Layout: vincola contenuti al viewport e abilita scroll interni */
+      display:flex;
+      flex-direction: column;
+      gap: 14px;
     }
 
     /* Top bar */
@@ -67,6 +72,7 @@
       position: sticky;
       top: 14px;
       z-index: 10;
+      flex: 0 0 auto;
     }
 
     .brand{
@@ -122,7 +128,6 @@
       font-size: 12px;
       user-select:none;
     }
-    .pill b{color:var(--text); font-weight:600}
     .btn{
       display:inline-flex;
       align-items:center;
@@ -150,19 +155,37 @@
       background: rgba(251,113,133,.08);
     }
 
+    .dot{
+      width: 8px; height: 8px;
+      border-radius: 99px;
+      background: rgba(255,255,255,.35);
+      box-shadow: 0 0 0 3px rgba(255,255,255,.05);
+    }
+    .dot.ok{background: var(--good)}
+    .dot.wait{background: var(--warn)}
+
+    /* Stack below topbar */
+    .mainStack{
+      flex: 1 1 auto;
+      min-height: 0; /* 🔑 serve per overflow interni */
+      display:flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
     /* Hero */
     .hero{
       display:grid;
       grid-template-columns: 1.2fr .8fr;
-      gap: 18px;
-      margin-top: 18px;
+      gap: 14px;
       align-items: stretch;
+      flex: 0 0 auto;
     }
     .heroCard{
       border: 1px solid var(--stroke);
       border-radius: var(--radius2);
       background: rgba(255,255,255,.04);
-      padding: 18px;
+      padding: 16px;
       box-shadow: var(--shadow);
       position: relative;
       overflow:hidden;
@@ -180,7 +203,7 @@
     .heroTitle{
       position: relative;
       margin: 0 0 6px;
-      font-size: 28px;
+      font-size: 26px;
       letter-spacing: -0.4px;
       line-height: 1.1;
     }
@@ -192,11 +215,11 @@
     }
     .heroSub{
       position: relative;
-      margin: 0 0 14px;
+      margin: 0 0 12px;
       color: var(--muted);
       font-size: 14px;
       line-height: 1.45;
-      max-width: 62ch;
+      max-width: 70ch;
     }
     .badgeRow{
       display:flex;
@@ -213,12 +236,49 @@
       color: var(--muted);
     }
 
+    .statusBar{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items:center;
+      justify-content:space-between;
+      border: 1px solid var(--stroke);
+      border-radius: 18px;
+      background: rgba(255,255,255,.03);
+      padding: 10px 12px;
+      position: relative;
+    }
+    .statusLeft{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items:center;
+    }
+    .statusTxt{font-size: 12px; color: var(--muted)}
+    .kbd{
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.03);
+      border-radius: 10px;
+      padding: 6px 8px;
+      font-size: 12px;
+      color: var(--muted);
+      user-select:none;
+    }
+    .hint{
+      color: var(--muted2);
+      font-size: 12px;
+      line-height: 1.35;
+      margin: 10px 0 0;
+      position: relative;
+    }
+
     /* App grid */
     .app{
-      margin-top: 18px;
+      flex: 1 1 auto;
+      min-height: 0; /* 🔑 */
       display:grid;
       grid-template-columns: .48fr .52fr;
-      gap: 18px;
+      gap: 14px;
       align-items: stretch;
     }
 
@@ -228,7 +288,7 @@
       border-radius: var(--radius2);
       box-shadow: var(--shadow);
       overflow:hidden;
-      min-height: 520px;
+      min-height: 0; /* 🔑 */
       display:flex;
       flex-direction: column;
     }
@@ -240,6 +300,7 @@
       gap: 12px;
       border-bottom: 1px solid var(--stroke);
       background: rgba(255,255,255,.02);
+      flex: 0 0 auto;
     }
     .panelHeader h2{
       margin:0;
@@ -255,8 +316,8 @@
       display:flex;
       flex-direction: column;
       gap: 12px;
-      flex:1;
-      min-height: 0;
+      flex: 1 1 auto;
+      min-height: 0; /* 🔑 */
     }
 
     /* Upload area */
@@ -273,6 +334,7 @@
       text-align:center;
       transition: background .15s ease, border-color .15s ease, transform .15s ease;
       min-height: 160px;
+      flex: 0 0 auto;
     }
     .dropzone.dragover{
       border-color: rgba(34,211,238,.6);
@@ -294,11 +356,6 @@
     .dzRow{display:flex; gap:10px; flex-wrap: wrap; justify-content:center}
 
     input[type="file"]{display:none}
-    .hint{
-      color: var(--muted2);
-      font-size: 12px;
-      line-height: 1.35;
-    }
 
     /* Files list */
     .fileList{
@@ -307,8 +364,8 @@
       gap: 10px;
       overflow:auto;
       padding-right: 4px;
-      min-height: 0;
-      flex: 1;
+      min-height: 0; /* 🔑 */
+      flex: 1 1 auto;
     }
     .fileItem{
       display:flex;
@@ -340,6 +397,7 @@
       color: var(--muted);
       margin:0;
     }
+
     .chip{
       display:inline-flex;
       align-items:center;
@@ -355,6 +413,7 @@
     .chip.good{border-color: rgba(52,211,153,.35); background: rgba(52,211,153,.06); color: rgba(255,255,255,.86)}
     .chip.warn{border-color: rgba(251,191,36,.35); background: rgba(251,191,36,.06); color: rgba(255,255,255,.86)}
     .chip.bad{border-color: rgba(251,113,133,.35); background: rgba(251,113,133,.06); color: rgba(255,255,255,.86)}
+
     .miniBtn{
       width: 34px; height: 34px;
       border-radius: 12px;
@@ -375,13 +434,13 @@
       display:flex;
       flex-direction: column;
       gap: 12px;
-      flex: 1;
-      min-height: 0;
+      flex: 1 1 auto;
+      min-height: 0; /* 🔑 */
     }
     .chat{
-      flex: 1;
-      min-height: 0;
-      overflow:auto;
+      flex: 1 1 auto;
+      min-height: 0; /* 🔑 */
+      overflow:auto; /* ✅ ora scrolla la chat */
       display:flex;
       flex-direction: column;
       gap: 10px;
@@ -413,6 +472,7 @@
       font-size: 12px;
       color: var(--muted);
     }
+
     .sources{
       margin-top: 8px;
       display:flex;
@@ -440,6 +500,13 @@
       color: var(--muted);
       line-height: 1.35;
     }
+    .sourceRight{
+      display:flex;
+      gap: 8px;
+      align-items:center;
+      flex-shrink: 0;
+    }
+
     mark{
       background: rgba(34,211,238,.18);
       color: var(--text);
@@ -454,6 +521,7 @@
       display:flex;
       gap: 10px;
       align-items:flex-end;
+      flex: 0 0 auto;
     }
     .textarea{
       flex: 1;
@@ -487,48 +555,65 @@
     .send:active{transform: translateY(0px)}
     .send:disabled{opacity:.5; cursor:not-allowed}
 
-    .statusBar{
-      display:flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      align-items:center;
-      justify-content:space-between;
-      border: 1px solid var(--stroke);
+    /* Modal */
+    .modalRoot{
+      display:none;
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+    }
+    .modalOverlay{
+      position:absolute;
+      inset:0;
+      background: rgba(0,0,0,.55);
+    }
+    .modalCard{
+      position: relative;
+      width: min(980px, calc(100% - 24px));
+      margin: 6vh auto;
+      background: rgba(20,24,34,.92);
+      border:1px solid rgba(255,255,255,.14);
       border-radius: 18px;
-      background: rgba(255,255,255,.03);
-      padding: 10px 12px;
+      box-shadow: 0 30px 90px rgba(0,0,0,.6);
+      overflow:hidden;
     }
-    .statusLeft{
+    .modalHeader{
       display:flex;
-      gap: 10px;
-      flex-wrap: wrap;
+      justify-content:space-between;
       align-items:center;
+      padding: 12px 14px;
+      border-bottom:1px solid rgba(255,255,255,.12);
+      gap: 12px;
     }
-    .dot{
-      width: 8px; height: 8px;
-      border-radius: 99px;
-      background: rgba(255,255,255,.35);
-      box-shadow: 0 0 0 3px rgba(255,255,255,.05);
+    .modalTitleWrap{min-width:0}
+    .modalTitle{
+      font-weight: 800;
+      font-size: 13px;
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
     }
-    .dot.ok{background: var(--good)}
-    .dot.wait{background: var(--warn)}
-    .statusTxt{font-size: 12px; color: var(--muted)}
-    .kbd{
-      border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.03);
-      border-radius: 10px;
-      padding: 6px 8px;
+    .modalSub{
       font-size: 12px;
-      color: var(--muted);
-      user-select:none;
+      color: rgba(255,255,255,.6);
+      margin-top: 2px;
+    }
+    .modalBody{
+      padding: 14px;
+      max-height: 70vh;
+      overflow:auto;
+      font-size: 13px;
+      line-height: 1.45;
+      color: rgba(255,255,255,.86);
+      white-space: pre-wrap;
     }
 
     /* Responsive */
     @media (max-width: 980px){
       .hero{grid-template-columns: 1fr; }
       .app{grid-template-columns: 1fr; }
-      .panel{min-height: 480px}
       .brand{min-width:auto}
+      .modalCard{ margin: 3vh auto; }
     }
   </style>
 </head>
@@ -550,108 +635,112 @@
           <span class="dot" id="idxDot"></span>
           <span id="idxText">Nessun documento caricato</span>
         </div>
-        <button class="btn primary" id="btnPick">
-          📄 Carica Word
-        </button>
-        <button class="btn danger" id="btnClear" title="Rimuove tutti i documenti e resetta la chat">
-          🗑️ Reset
-        </button>
+        <button class="btn primary" id="btnPick">📄 Carica Word</button>
+        <button class="btn danger" id="btnClear" title="Rimuove tutti i documenti e resetta la chat">🗑️ Reset</button>
       </div>
     </header>
 
-    <section class="hero">
-      <div class="heroCard">
-        <h2 class="heroTitle">Il tuo <span>secondo cervello</span>, in una pagina.</h2>
-        <p class="heroSub">
-          Carica uno o più file Word e fai domande come in chat.
-          Second Brain cerca nei documenti e ti riporta le parti rilevanti con le fonti.
-          (MVP front-end: ricerca testuale in locale.)
-        </p>
-        <div class="badgeRow">
-          <div class="badge">⚡ Estrazione testo .docx</div>
-          <div class="badge">🔎 Snippet + fonti</div>
-          <div class="badge">📱 Responsive</div>
-          <div class="badge">🧠 Base pronta per RAG/LLM</div>
-        </div>
-      </div>
-
-      <div class="heroCard">
-        <h2 class="heroTitle" style="font-size:18px;margin-bottom:10px">Tip veloci</h2>
-        <p class="heroSub" style="margin-bottom:10px">
-          Prova domande come:
-          <br>• “Dove si parla di <b>budget</b>?”
-          <br>• “Riassumi la parte su <b>processo</b>”
-          <br>• “Cosa dice sul <b>cliente</b>?”
-        </p>
-        <div class="statusBar">
-          <div class="statusLeft">
-            <span class="dot wait" id="readyDot"></span>
-            <span class="statusTxt" id="readyText">In attesa di documenti…</span>
+    <div class="mainStack">
+      <section class="hero">
+        <div class="heroCard">
+          <h2 class="heroTitle">Il tuo <span>secondo cervello</span>, in una pagina.</h2>
+          <p class="heroSub">
+            Carica uno o più file Word e fai domande come in chat.
+            Second Brain cerca nei documenti e ti riporta le parti rilevanti con le fonti.
+            (MVP front-end: ricerca BM25 + snippet + apertura testo completo.)
+          </p>
+          <div class="badgeRow">
+            <div class="badge">⚡ Estrazione testo .docx</div>
+            <div class="badge">🔎 BM25 (punteggi sensati)</div>
+            <div class="badge">🌍 IT + EN</div>
+            <div class="badge">📄 “Leggi tutto” per ogni fonte</div>
           </div>
-          <span class="kbd">Invio = invia • Shift+Invio = a capo</span>
-        </div>
-        <p class="hint" style="margin:10px 0 0">
-          Privacy: l’estrazione avviene nel browser. Nessun upload a server (in questa demo).
-        </p>
-      </div>
-    </section>
-
-    <main class="app">
-      <!-- LEFT: Upload + files -->
-      <section class="panel">
-        <div class="panelHeader">
-          <div>
-            <h2>Documenti</h2>
-            <small>Carica file Word (.docx)</small>
-          </div>
-          <div class="chip" id="docCounter">0 file</div>
         </div>
 
-        <div class="panelBody">
-          <div class="dropzone" id="dropzone">
-            <div class="dropIcon" aria-hidden="true">⬆️</div>
-            <p class="dzTitle">Trascina qui i tuoi file Word</p>
-            <p class="dzSub">Oppure clicca per selezionare più documenti (.docx). I .doc non sono supportati.</p>
-            <div class="dzRow">
-              <label class="btn primary" for="fileInput">Seleziona file</label>
-              <button class="btn" id="btnDemo">Carica demo</button>
+        <div class="heroCard">
+          <h2 class="heroTitle" style="font-size:18px;margin-bottom:10px">Tip veloci</h2>
+          <p class="heroSub" style="margin-bottom:10px">
+            Esempi:
+            <br>• “terminale wifi”
+            <br>• “reset password zebra”
+            <br>• “approval process budget”
+          </p>
+          <div class="statusBar">
+            <div class="statusLeft">
+              <span class="dot wait" id="readyDot"></span>
+              <span class="statusTxt" id="readyText">In attesa di documenti…</span>
             </div>
-            <p class="hint" id="uploadHint">Suggerimento: carica 2-3 documenti e poi fai una domanda mirata.</p>
+            <span class="kbd">Invio = invia • Shift+Invio = a capo</span>
           </div>
-
-          <input id="fileInput" type="file" accept=".docx,.doc" multiple />
-
-          <div class="fileList" id="fileList" aria-label="Elenco documenti caricati">
-            <!-- items injected -->
-          </div>
+          <p class="hint">Privacy: in questa demo l’estrazione avviene nel browser. Nessun upload a server.</p>
         </div>
       </section>
 
-      <!-- RIGHT: Chat -->
-      <section class="panel">
-        <div class="panelHeader">
-          <div>
-            <h2>Chat</h2>
-            <small>Fai domande ai tuoi documenti</small>
+      <main class="app">
+        <!-- LEFT: Upload + files -->
+        <section class="panel">
+          <div class="panelHeader">
+            <div>
+              <h2>Documenti</h2>
+              <small>Carica file Word (.docx)</small>
+            </div>
+            <div class="chip" id="docCounter">0 file</div>
           </div>
-          <div class="chip good" id="modeChip">Ricerca locale</div>
-        </div>
 
-        <div class="panelBody chatWrap">
-          <div class="chat" id="chat" aria-label="Chat">
-            <!-- messages injected -->
+          <div class="panelBody">
+            <div class="dropzone" id="dropzone">
+              <div class="dropIcon" aria-hidden="true">⬆️</div>
+              <p class="dzTitle">Trascina qui i tuoi file Word</p>
+              <p class="dzSub">Oppure clicca per selezionare più documenti (.docx). I .doc non sono supportati.</p>
+              <div class="dzRow">
+                <label class="btn primary" for="fileInput">Seleziona file</label>
+                <button class="btn" id="btnDemo">Carica demo</button>
+              </div>
+              <p class="hint" id="uploadHint">Suggerimento: carica 2-3 documenti e poi fai una domanda mirata.</p>
+            </div>
+
+            <input id="fileInput" type="file" accept=".docx,.doc" multiple />
+
+            <div class="fileList" id="fileList" aria-label="Elenco documenti caricati"></div>
           </div>
-        </div>
+        </section>
 
-        <div class="composer">
-          <textarea id="question" class="textarea" placeholder="Scrivi una domanda… (es: 'Dove si parla di budget?')"></textarea>
-          <button class="send" id="sendBtn" title="Invia">
-            ➤
-          </button>
-        </div>
-      </section>
-    </main>
+        <!-- RIGHT: Chat -->
+        <section class="panel">
+          <div class="panelHeader">
+            <div>
+              <h2>Chat</h2>
+              <small>Fai domande ai tuoi documenti</small>
+            </div>
+            <div class="chip good" id="modeChip">Ricerca BM25</div>
+          </div>
 
+          <div class="panelBody chatWrap">
+            <div class="chat" id="chat" aria-label="Chat"></div>
+          </div>
+
+          <div class="composer">
+            <textarea id="question" class="textarea" placeholder="Scrivi una domanda… (es: 'terminale wifi' / 'approval process')"></textarea>
+            <button class="send" id="sendBtn" title="Invia">➤</button>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- MODAL: documento esteso -->
+  <div id="docModal" class="modalRoot" aria-hidden="true">
+    <div id="docModalOverlay" class="modalOverlay"></div>
+    <div class="modalCard" role="dialog" aria-modal="true" aria-label="Documento esteso">
+      <div class="modalHeader">
+        <div class="modalTitleWrap">
+          <div id="docModalTitle" class="modalTitle"></div>
+          <div id="docModalSub" class="modalSub"></div>
+        </div>
+        <button id="docModalClose" class="miniBtn" title="Chiudi">✕</button>
+      </div>
+      <div id="docModalBody" class="modalBody"></div>
+    </div>
   </div>
 
   <!-- Mammoth.js (DOCX -> text) -->
@@ -660,9 +749,10 @@
   <script>
     /**
      * Second Brain — MVP front-end
-     * - Carica .docx
-     * - Estrae testo (mammoth)
-     * - Ricerca keyword con snippet e fonti
+     * - Upload docx
+     * - Estrazione testo (mammoth)
+     * - Ricerca BM25 con stopwords IT+EN
+     * - Snippet + "Leggi tutto" (modal con testo completo + highlight)
      */
 
     const el = {
@@ -682,11 +772,41 @@
       readyText: document.getElementById("readyText"),
     };
 
-    /** In-memory “index” */
+    /** Modal elements */
+    const modal = {
+      root: document.getElementById("docModal"),
+      overlay: document.getElementById("docModalOverlay"),
+      close: document.getElementById("docModalClose"),
+      title: document.getElementById("docModalTitle"),
+      sub: document.getElementById("docModalSub"),
+      body: document.getElementById("docModalBody"),
+    };
+
+    /** In-memory index */
     const state = {
       docs: [], // {id, name, size, text, addedAt, warnings:[]}
       nextId: 1
     };
+
+    /** Stopwords IT + EN (essenziali) */
+    const STOP = new Set([
+      // IT
+      "a","ad","al","allo","ai","agli","alla","alle","anche","ancora","avere","che","chi","ci","coi","come",
+      "con","contro","cosa","da","dal","dallo","dai","dagli","dalla","dalle","dei","degli","della","delle",
+      "di","dove","e","ed","era","erano","essere","fa","fai","fanno","gli","ha","hai","hanno","ho","i","il",
+      "in","l","la","le","lei","lo","loro","ma","mi","mia","mie","mio","ne","nel","nello","nei","negli","nella",
+      "nelle","no","noi","non","nostro","o","per","pero","piu","quale","quando","qui","se","sei","sia","siamo",
+      "sono","su","sul","sullo","sui","sugli","sulla","sulle","tra","un","una","uno","vi","voi",
+      // EN
+      "a","an","and","are","as","at","be","because","been","being","but","by","can","could","did","do","does",
+      "doing","down","during","each","few","for","from","further","had","has","have","having","he","her","here",
+      "hers","herself","him","himself","his","how","i","if","in","into","is","it","its","itself","just","me",
+      "more","most","my","myself","no","nor","not","now","of","off","on","once","only","or","other","our","ours",
+      "ourselves","out","over","own","s","same","she","should","so","some","such","t","than","that","the","their",
+      "theirs","them","themselves","then","there","these","they","this","those","through","to","too","under",
+      "until","up","very","was","we","were","what","when","where","which","while","who","whom","why","will","with",
+      "you","your","yours","yourself","yourselves"
+    ]);
 
     function fmtBytes(bytes){
       const units = ["B","KB","MB","GB"];
@@ -713,38 +833,66 @@
       }
     }
 
-    function addMessage(role, text, extraHtml = ""){
-      const div = document.createElement("div");
-      div.className = `msg ${role}`;
-      div.innerHTML = escapeHtml(text) + extraHtml;
-      el.chat.appendChild(div);
-      el.chat.scrollTop = el.chat.scrollHeight;
-    }
-
     function escapeHtml(str){
       return (str ?? "").toString()
         .replaceAll("&","&amp;")
         .replaceAll("<","&lt;")
         .replaceAll(">","&gt;")
         .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;")
-        .replaceAll("\n","<br>");
-    }
-
-    function highlightSnippet(snippet, tokens){
-      let out = snippet;
-      // Escape first, then highlight using a safe approach.
-      out = escapeHtml(out).replaceAll("<br>","\n"); // internal
-      tokens.forEach(t=>{
-        if(!t) return;
-        const re = new RegExp(`(${escapeRegExp(t)})`, "ig");
-        out = out.replace(re, "<mark>$1</mark>");
-      });
-      return out.replaceAll("\n","<br>");
+        .replaceAll("'","&#039;");
     }
 
     function escapeRegExp(s){
       return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+
+    function normalizeText(s){
+      // minuscolo + rimuove diacritici (utile per IT/EN)
+      return (s || "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function tokenizeQuery(q){
+      const norm = normalizeText(q)
+        .replace(/[^\p{L}\p{N}\s]/gu, " ");
+      const raw = norm.split(/\s+/).map(t => t.trim()).filter(Boolean);
+
+      // filtra stopwords e tokens piccoli (>=3) ma lascia sigle utili tipo "vpn"
+      const tokens = [];
+      for(const t of raw){
+        if(t.length < 3) continue;
+        if(STOP.has(t)) continue;
+        tokens.push(t);
+      }
+      return Array.from(new Set(tokens));
+    }
+
+    function tokenizeDoc(text){
+      const norm = normalizeText(text).replace(/[^\p{L}\p{N}\s]/gu, " ");
+      return norm.split(/\s+/).map(t => t.trim()).filter(t => t.length >= 3);
+    }
+
+    function highlightHtmlFromText(text, tokens){
+      // trasformo documento in HTML sicuro e poi evidenzio tokens
+      let html = escapeHtml(text);
+      for(const t of tokens || []){
+        const re = new RegExp(`(${escapeRegExp(t)})`, "ig");
+        html = html.replace(re, "<mark>$1</mark>");
+      }
+      // mantieni a capo
+      return html.replaceAll("\n","<br>");
+    }
+
+    function addMessage(role, text, extraHtml = ""){
+      const div = document.createElement("div");
+      div.className = `msg ${role}`;
+      const safeText = escapeHtml(text).replaceAll("\n","<br>");
+      div.innerHTML = safeText + (extraHtml || "");
+      el.chat.appendChild(div);
+      el.chat.scrollTop = el.chat.scrollHeight;
+      return div;
     }
 
     /** Render docs list */
@@ -772,8 +920,7 @@
 
         const info = document.createElement("p");
         info.className = "fileInfo";
-        const textLen = doc.text ? doc.text.length : 0;
-        const approxWords = doc.text ? Math.max(0, doc.text.trim().split(/\s+/).length) : 0;
+        const approxWords = doc.text ? Math.max(0, tokenizeDoc(doc.text).length) : 0;
         info.textContent = `${fmtBytes(doc.size)} • ~${approxWords.toLocaleString("it-IT")} parole`;
 
         left.appendChild(name);
@@ -796,7 +943,10 @@
           state.docs = state.docs.filter(d => d.id !== doc.id);
           renderFiles();
           setStatus();
-          systemNudge();
+          if(state.docs.length === 0){
+            el.chat.innerHTML = "";
+            systemNudge();
+          }
         };
 
         right.appendChild(chip);
@@ -818,16 +968,9 @@
     }
 
     function systemNudge(){
-      // Add a helpful system message in chat depending on docs state.
-      if(state.docs.length === 0){
-        addMessage("ai",
-          "Ciao! Carica uno o più file Word (.docx) e poi chiedimi qualcosa.\nEsempio: “Dove si parla di budget?”"
-        );
-      } else if(el.chat.children.length === 0){
-        addMessage("ai",
-          "Perfetto. Ho indicizzato i documenti.\nOra fammi una domanda e ti riporto le parti rilevanti con le fonti."
-        );
-      }
+      addMessage("ai",
+        "Ciao! Carica uno o più file Word (.docx) e poi chiedimi qualcosa.\nEsempi: “terminale wifi”, “reset password”, “approval process”."
+      );
     }
 
     /** Extract text from DOCX using Mammoth */
@@ -837,7 +980,7 @@
       return (result.value || "").replace(/\u0000/g, "").trim();
     }
 
-    /** Add documents from FileList */
+    /** Add documents */
     async function addFiles(fileList){
       const files = Array.from(fileList || []);
       if(files.length === 0) return;
@@ -864,12 +1007,11 @@
           continue;
         }
 
-        // UI feedback
         addMessage("ai", `Sto leggendo: ${file.name}…`);
 
         try{
           doc.text = await extractDocxText(file);
-          if(!doc.text || doc.text.length < 20){
+          if(!doc.text || doc.text.length < 30){
             doc.warnings.push("Testo estratto molto breve (documento vuoto o complesso).");
           }
         } catch(err){
@@ -880,114 +1022,203 @@
         state.docs.push(doc);
       }
 
-      // Cleanup: remove loading messages? keep them; it's okay.
       renderFiles();
       setStatus();
-
-      // Suggest next action
       addMessage("ai", "Done ✅ Documenti aggiornati. Ora puoi fare una domanda.");
     }
 
-    /** Simple search: tokenize query, score matches per document, return top snippets */
-    function searchDocs(query){
+    /**
+     * Search BM25
+     * - Token query puliti + stopwords IT/EN
+     * - Tokenize doc
+     * - df/TF + BM25 score
+     */
+    function searchDocsBM25(query){
       const q = (query || "").trim();
       if(!q) return { tokens: [], hits: [] };
 
-      // Tokenization: keep words >= 2 chars
-      const tokens = Array.from(new Set(
-        q.toLowerCase()
-          .replace(/[^\p{L}\p{N}\s]/gu, " ")
-          .split(/\s+/)
-          .map(t => t.trim())
-          .filter(t => t.length >= 2)
-      ));
+      const tokens = tokenizeQuery(q);
+      if(tokens.length === 0) return { tokens: [], hits: [] };
+
+      const docs = state.docs.filter(d => d.text && d.text.length > 0);
+      const N = docs.length || 1;
+
+      // Preprocessing
+      const df = new Map();          // term -> doc frequency
+      const docTf = new Map();       // docId -> Map(term->freq)
+      const docLen = new Map();      // docId -> length
+      const docTextNorm = new Map(); // docId -> normalized text (per trovare snippet)
+
+      for(const d of docs){
+        const terms = tokenizeDoc(d.text);
+        docLen.set(d.id, terms.length || 1);
+
+        const tf = new Map();
+        for(const term of terms){
+          tf.set(term, (tf.get(term) || 0) + 1);
+        }
+        docTf.set(d.id, tf);
+
+        const unique = new Set(terms);
+        for(const term of unique){
+          df.set(term, (df.get(term) || 0) + 1);
+        }
+
+        docTextNorm.set(d.id, normalizeText(d.text));
+      }
+
+      const avgdl = Array.from(docLen.values()).reduce((a,c)=>a+c,0) / (docs.length || 1);
+      const k1 = 1.5;
+      const b = 0.75;
 
       const hits = [];
 
-      for(const doc of state.docs){
-        if(!doc.text) continue;
-        const textLower = doc.text.toLowerCase();
+      for(const d of docs){
+        const tf = docTf.get(d.id);
+        const dl = docLen.get(d.id) || 1;
 
-        // Score by token frequency
         let score = 0;
-        const positions = [];
+
         for(const t of tokens){
-          let idx = textLower.indexOf(t);
-          while(idx !== -1){
-            score += 1;
-            positions.push(idx);
-            idx = textLower.indexOf(t, idx + t.length);
-          }
+          const f = tf.get(t) || 0;
+          if(!f) continue;
+          const n = df.get(t) || 1;
+          const idf = Math.log(1 + (N - n + 0.5) / (n + 0.5)); // BM25 idf
+          const denom = f + k1 * (1 - b + b * (dl / (avgdl || 1)));
+          score += idf * (f * (k1 + 1)) / (denom || 1);
         }
-        if(score === 0) continue;
 
-        // Build snippet around first match
-        positions.sort((a,b)=>a-b);
-        const first = positions[0];
-        const radius = 140;
+        if(score <= 0) continue;
+
+        // snippet: prima occorrenza di uno dei token
+        const normText = docTextNorm.get(d.id) || "";
+        let first = -1;
+        for(const t of tokens){
+          const idx = normText.indexOf(t);
+          if(idx !== -1 && (first === -1 || idx < first)) first = idx;
+        }
+
+        // Se non trovo pos, fallback inizio
+        if(first === -1) first = 0;
+
+        // ricostruisco snippet sul testo originale (non normalizzato)
+        const radius = 260;
         const start = Math.max(0, first - radius);
-        const end = Math.min(doc.text.length, first + radius);
-        let snippet = doc.text.slice(start, end).trim();
-
-        // Add ellipses
+        const end = Math.min(d.text.length, first + radius);
+        let snippet = d.text.slice(start, end).trim();
         if(start > 0) snippet = "… " + snippet;
-        if(end < doc.text.length) snippet = snippet + " …";
+        if(end < d.text.length) snippet = snippet + " …";
 
         hits.push({
-          docId: doc.id,
-          name: doc.name,
-          score,
+          docId: d.id,
+          name: d.name,
+          score: Number(score.toFixed(2)),
           snippet
         });
       }
 
       hits.sort((a,b)=>b.score - a.score);
-      return { tokens, hits: hits.slice(0, 4) }; // top 4 sources
+      return { tokens, hits: hits.slice(0, 5) };
     }
 
     function buildAiResponse(query){
       if(state.docs.length === 0){
-        return {
-          text: "Prima carica almeno un documento .docx.\nPoi rifai la domanda 🙂",
-          sourcesHtml: ""
-        };
+        return { text: "Prima carica almeno un documento .docx.\nPoi rifai la domanda 🙂", sourcesHtml: "" };
       }
 
-      const { tokens, hits } = searchDocs(query);
+      const { tokens, hits } = searchDocsBM25(query);
 
       if(tokens.length === 0){
         return {
-          text: "Non riesco a capire cosa cercare. Scrivi una domanda con 1-2 parole chiave (es: “budget”, “processo”, “cliente”).",
+          text: "Non riesco a capire cosa cercare. Scrivi 1–3 parole chiave (es: “terminale wifi”, “budget approval”).",
           sourcesHtml: ""
         };
       }
 
       if(hits.length === 0){
         return {
-          text: `Non ho trovato occorrenze per: ${tokens.join(", ")}.\nSuggerimento: prova sinonimi o termini più specifici.`,
+          text: `Non ho trovato risultati per: ${tokens.join(", ")}.\nSuggerimento: prova sinonimi o termini più specifici.`,
           sourcesHtml: ""
         };
       }
 
       const summary = `Ho trovato riferimenti a: ${tokens.join(", ")}.\nEcco le parti più rilevanti nei documenti:`;
+
       const sourcesHtml =
         `<div class="sources">` +
-        hits.map(h => `
-          <div class="source">
-            <h4>
-              <span>📌 ${escapeHtml(h.name)}</span>
-              <span class="chip good" style="padding:5px 9px; font-size:11px;">score ${h.score}</span>
-            </h4>
-            <p>${highlightSnippet(h.snippet, tokens)}</p>
-          </div>
-        `).join("") +
-        `</div>
-        <span class="meta">Suggerimento: se vuoi una risposta “ragionata” (tipo chat AI), collega questa UI a un backend RAG.</span>`;
+        hits.map(h => {
+          const tokensEnc = encodeURIComponent(JSON.stringify(tokens));
+          return `
+            <div class="source">
+              <h4>
+                <span>📌 ${escapeHtml(h.name)}</span>
+                <span class="sourceRight">
+                  <button class="btn js-openDoc" style="padding:6px 10px; font-size:11px;"
+                    data-docid="${h.docId}" data-tokens="${tokensEnc}">
+                    Leggi tutto
+                  </button>
+                  <span class="chip good" style="padding:5px 9px; font-size:11px;">score ${h.score}</span>
+                </span>
+              </h4>
+              <p>${highlightSnippet(h.snippet, tokens)}</p>
+            </div>
+          `;
+        }).join("") +
+        `</div>`;
 
       return { text: summary, sourcesHtml };
     }
 
-    /** Events */
+    function highlightSnippet(snippet, tokens){
+      // evidenzio tokens su snippet (safe)
+      let html = escapeHtml(snippet);
+      for(const t of tokens || []){
+        const re = new RegExp(`(${escapeRegExp(t)})`, "ig");
+        html = html.replace(re, "<mark>$1</mark>");
+      }
+      return html.replaceAll("\n","<br>");
+    }
+
+    // Wire buttons "Leggi tutto" dentro un blocco messaggio
+    function wireOpenDocButtons(scope){
+      const btns = scope.querySelectorAll(".js-openDoc");
+      btns.forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+          const docId = Number(btn.dataset.docid);
+          const tokens = JSON.parse(decodeURIComponent(btn.dataset.tokens || "[]"));
+          openDocModal(docId, tokens);
+        });
+      });
+    }
+
+    // ===== Modal logic =====
+    function openDocModal(docId, tokens){
+      const doc = state.docs.find(d => d.id === docId);
+      if(!doc) return;
+
+      modal.title.textContent = doc.name;
+      modal.sub.textContent = `Documento completo • ${doc.text.length.toLocaleString("it-IT")} caratteri • Ctrl+F per cercare`;
+
+      // evidenzia tokens sul testo completo
+      const normTokens = (tokens || []).map(t => normalizeText(t));
+      const html = highlightHtmlFromText(doc.text, normTokens);
+
+      modal.body.innerHTML = html;
+      modal.root.style.display = "block";
+      modal.root.setAttribute("aria-hidden","false");
+    }
+
+    function closeDocModal(){
+      modal.root.style.display = "none";
+      modal.root.setAttribute("aria-hidden","true");
+      modal.body.innerHTML = "";
+    }
+
+    modal.overlay.addEventListener("click", closeDocModal);
+    modal.close.addEventListener("click", closeDocModal);
+    document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeDocModal(); });
+
+    // ===== Events =====
     el.btnPick.addEventListener("click", () => el.fileInput.click());
     el.fileInput.addEventListener("change", async (e) => {
       await addFiles(e.target.files);
@@ -996,7 +1227,6 @@
 
     // Dropzone click -> open input
     el.dropzone.addEventListener("click", (e) => {
-      // avoid triggering when clicking inside buttons/labels
       const tag = (e.target.tagName || "").toLowerCase();
       if(tag === "button" || tag === "label") return;
       el.fileInput.click();
@@ -1024,47 +1254,49 @@
       }
     });
 
-    // Demo docs (fake text) to test without file
+    // Demo docs
     el.btnDemo.addEventListener("click", ()=>{
       const demo1 = {
         id: state.nextId++,
-        name: "Demo_Progetto_SecondBrain.docx",
+        name: "Demo_Spec_MVP_SecondBrain.docx",
         size: 48234,
         addedAt: new Date(),
         warnings: [],
         text: `
-Second Brain — Specifica MVP
+Second Brain — MVP Spec
 
-Obiettivo: creare un secondo cervello dell’utente. L’utente carica documenti Word e interagisce via chat.
-Funzionalità principali:
-- Upload multiplo dei .docx
-- Indicizzazione e ricerca nei contenuti
-- Restituzione di snippet con fonti
-- Layout responsive e semplice
+Goal: Build a "second brain" for the user.
+The user uploads Word documents and interacts via chat.
+Core features:
+- Multi-upload .docx
+- Indexing and search over content
+- Snippets with sources
+- Responsive layout, simple UX
 
-Nota: la versione avanzata prevede RAG con LLM (Azure OpenAI) e storage dei vettori.
+Advanced version: RAG with embeddings + LLM and vector storage (Azure OpenAI).
 `.trim()
       };
 
       const demo2 = {
         id: state.nextId++,
-        name: "Demo_Policy_Aziendali.docx",
+        name: "Demo_Policy_IT_EN.docx",
         size: 61202,
         addedAt: new Date(),
         warnings: [],
         text: `
-Policy interne — Estratto
+Policy — Extract (IT/EN)
 
 Budget: ogni richiesta sopra i 5.000€ deve essere approvata dal responsabile.
-Processo: le richieste passano da analisi → approvazione → implementazione → verifica.
-Cliente: la comunicazione deve essere tracciata nel sistema e condivisa con il team.
+Process: requests go from analysis → approval → implementation → verification.
+WiFi terminal: if Zebra terminals lose WiFi, restart network settings and re-pair the device.
+Password reset: use the internal portal to reset credentials and confirm via email.
 `.trim()
       };
 
       state.docs.push(demo1, demo2);
       renderFiles();
       setStatus();
-      addMessage("ai", "Ho caricato 2 documenti demo ✅ Ora puoi fare una domanda (es: “budget”, “processo”).");
+      addMessage("ai", "Ho caricato 2 documenti demo ✅ Ora puoi fare una domanda (es: “terminale wifi”, “approval process”).");
     });
 
     // Reset
@@ -1077,18 +1309,17 @@ Cliente: la comunicazione deve essere tracciata nel sistema e condivisa con il t
       systemNudge();
     });
 
-    // Send logic
     function sendQuestion(){
       const q = (el.question.value || "").trim();
       if(!q) return;
       el.question.value = "";
       addMessage("user", q);
 
-      // Simulate thinking
       setTimeout(()=>{
         const { text, sourcesHtml } = buildAiResponse(q);
-        addMessage("ai", text, sourcesHtml);
-      }, 220);
+        const msgEl = addMessage("ai", text, sourcesHtml);
+        wireOpenDocButtons(msgEl); // 🔑 aggiorna click "Leggi tutto"
+      }, 180);
     }
 
     el.sendBtn.addEventListener("click", sendQuestion);
