@@ -1,0 +1,1108 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Second Brain — Il tuo secondo cervello</title>
+  <meta name="description" content="Carica documenti Word e interagisci con il tuo Second Brain: ricerca intelligente nei tuoi file." />
+
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #0b0f17;
+      --panel: rgba(255,255,255,.06);
+      --panel2: rgba(255,255,255,.08);
+      --stroke: rgba(255,255,255,.12);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.68);
+      --muted2: rgba(255,255,255,.52);
+      --brand1: #7c4dff;
+      --brand2: #22d3ee;
+      --good: #34d399;
+      --warn: #fbbf24;
+      --bad: #fb7185;
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+      --radius: 18px;
+      --radius2: 26px;
+      --maxw: 1160px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(1200px 600px at 20% -10%, rgba(124,77,255,.35) 0%, transparent 55%),
+        radial-gradient(1000px 600px at 90% 10%, rgba(34,211,238,.25) 0%, transparent 52%),
+        radial-gradient(900px 700px at 60% 120%, rgba(52,211,153,.18) 0%, transparent 55%),
+        var(--bg);
+      color: var(--text);
+      overflow-x:hidden;
+    }
+
+    a{color:inherit}
+    .container{
+      width:min(var(--maxw), calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 56px;
+    }
+
+    /* Top bar */
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      border: 1px solid var(--stroke);
+      background: rgba(10, 14, 23, .62);
+      backdrop-filter: blur(10px);
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 14px;
+      z-index: 10;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      min-width: 220px;
+    }
+    .logo{
+      width: 38px; height: 38px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(124,77,255,1), rgba(34,211,238,1));
+      box-shadow: 0 10px 26px rgba(124,77,255,.25);
+      position: relative;
+      overflow:hidden;
+    }
+    .logo:after{
+      content:"";
+      position:absolute; inset:-60% -80%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.5), transparent 40%);
+      transform: rotate(18deg);
+      opacity:.55;
+    }
+    .brand h1{
+      font-size: 14px;
+      margin:0;
+      letter-spacing: .2px;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+    .brand p{
+      margin:0;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .actions{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content:flex-end;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.05);
+      color: var(--muted);
+      font-size: 12px;
+      user-select:none;
+    }
+    .pill b{color:var(--text); font-weight:600}
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.05);
+      color: var(--text);
+      font-weight: 600;
+      font-size: 12px;
+      cursor:pointer;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      user-select:none;
+    }
+    .btn:hover{transform: translateY(-1px); background: rgba(255,255,255,.08)}
+    .btn:active{transform: translateY(0px)}
+    .btn.primary{
+      border-color: rgba(124,77,255,.55);
+      background: linear-gradient(135deg, rgba(124,77,255,.38), rgba(34,211,238,.18));
+    }
+    .btn.danger{
+      border-color: rgba(251,113,133,.45);
+      background: rgba(251,113,133,.08);
+    }
+
+    /* Hero */
+    .hero{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 18px;
+      margin-top: 18px;
+      align-items: stretch;
+    }
+    .heroCard{
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius2);
+      background: rgba(255,255,255,.04);
+      padding: 18px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow:hidden;
+    }
+    .heroCard:before{
+      content:"";
+      position:absolute;
+      inset:-60% -40%;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(124,77,255,.18), transparent 42%),
+        radial-gradient(circle at 70% 55%, rgba(34,211,238,.14), transparent 45%);
+      filter: blur(2px);
+      pointer-events:none;
+    }
+    .heroTitle{
+      position: relative;
+      margin: 0 0 6px;
+      font-size: 28px;
+      letter-spacing: -0.4px;
+      line-height: 1.1;
+    }
+    .heroTitle span{
+      background: linear-gradient(135deg, rgba(124,77,255,1), rgba(34,211,238,1));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .heroSub{
+      position: relative;
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+      max-width: 62ch;
+    }
+    .badgeRow{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      position: relative;
+    }
+    .badge{
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.04);
+      border-radius: 999px;
+      padding: 9px 11px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* App grid */
+    .app{
+      margin-top: 18px;
+      display:grid;
+      grid-template-columns: .48fr .52fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .panel{
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.04);
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      min-height: 520px;
+      display:flex;
+      flex-direction: column;
+    }
+    .panelHeader{
+      padding: 14px 14px 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      border-bottom: 1px solid var(--stroke);
+      background: rgba(255,255,255,.02);
+    }
+    .panelHeader h2{
+      margin:0;
+      font-size: 14px;
+      letter-spacing: .2px;
+    }
+    .panelHeader small{
+      color: var(--muted2);
+      font-size: 12px;
+    }
+    .panelBody{
+      padding: 14px;
+      display:flex;
+      flex-direction: column;
+      gap: 12px;
+      flex:1;
+      min-height: 0;
+    }
+
+    /* Upload area */
+    .dropzone{
+      border: 1px dashed rgba(255,255,255,.22);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.03);
+      padding: 14px;
+      display:flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-align:center;
+      transition: background .15s ease, border-color .15s ease, transform .15s ease;
+      min-height: 160px;
+    }
+    .dropzone.dragover{
+      border-color: rgba(34,211,238,.6);
+      background: rgba(34,211,238,.06);
+      transform: translateY(-1px);
+    }
+    .dropIcon{
+      width: 46px; height: 46px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(124,77,255,.22), rgba(34,211,238,.12));
+      border: 1px solid rgba(255,255,255,.12);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow: 0 12px 30px rgba(0,0,0,.25);
+    }
+    .dzTitle{font-weight:700; font-size: 13px; margin: 0}
+    .dzSub{margin:0; color: var(--muted); font-size: 12px; line-height:1.35}
+    .dzRow{display:flex; gap:10px; flex-wrap: wrap; justify-content:center}
+
+    input[type="file"]{display:none}
+    .hint{
+      color: var(--muted2);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    /* Files list */
+    .fileList{
+      display:flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow:auto;
+      padding-right: 4px;
+      min-height: 0;
+      flex: 1;
+    }
+    .fileItem{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 10px;
+      border: 1px solid var(--stroke);
+      border-radius: 16px;
+      background: rgba(255,255,255,.03);
+      padding: 10px 10px 10px 12px;
+    }
+    .fileMeta{
+      display:flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+    .fileName{
+      font-size: 13px;
+      font-weight: 700;
+      margin:0;
+      overflow:hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 100%;
+    }
+    .fileInfo{
+      font-size: 12px;
+      color: var(--muted);
+      margin:0;
+    }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.04);
+      color: var(--muted);
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+    .chip.good{border-color: rgba(52,211,153,.35); background: rgba(52,211,153,.06); color: rgba(255,255,255,.86)}
+    .chip.warn{border-color: rgba(251,191,36,.35); background: rgba(251,191,36,.06); color: rgba(255,255,255,.86)}
+    .chip.bad{border-color: rgba(251,113,133,.35); background: rgba(251,113,133,.06); color: rgba(255,255,255,.86)}
+    .miniBtn{
+      width: 34px; height: 34px;
+      border-radius: 12px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transition: transform .12s ease, background .12s ease;
+      flex-shrink: 0;
+    }
+    .miniBtn:hover{transform: translateY(-1px); background: rgba(255,255,255,.08)}
+
+    /* Chat */
+    .chatWrap{
+      display:flex;
+      flex-direction: column;
+      gap: 12px;
+      flex: 1;
+      min-height: 0;
+    }
+    .chat{
+      flex: 1;
+      min-height: 0;
+      overflow:auto;
+      display:flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-right: 4px;
+    }
+    .msg{
+      max-width: 86%;
+      border-radius: 18px;
+      padding: 10px 12px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.03);
+      box-shadow: 0 10px 30px rgba(0,0,0,.15);
+      line-height: 1.35;
+      font-size: 13px;
+      white-space: pre-wrap;
+    }
+    .msg.user{
+      align-self:flex-end;
+      background: linear-gradient(135deg, rgba(124,77,255,.22), rgba(34,211,238,.12));
+      border-color: rgba(124,77,255,.35);
+    }
+    .msg.ai{
+      align-self:flex-start;
+      background: rgba(255,255,255,.03);
+    }
+    .msg .meta{
+      display:block;
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .sources{
+      margin-top: 8px;
+      display:flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .source{
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.03);
+      border-radius: 14px;
+      padding: 10px;
+    }
+    .source h4{
+      margin:0 0 6px;
+      font-size: 12px;
+      color: rgba(255,255,255,.9);
+      display:flex;
+      gap:8px;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .source p{
+      margin:0;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+    mark{
+      background: rgba(34,211,238,.18);
+      color: var(--text);
+      padding: 0 2px;
+      border-radius: 4px;
+    }
+
+    .composer{
+      border-top: 1px solid var(--stroke);
+      padding: 12px 14px;
+      background: rgba(255,255,255,.02);
+      display:flex;
+      gap: 10px;
+      align-items:flex-end;
+    }
+    .textarea{
+      flex: 1;
+      min-height: 42px;
+      max-height: 140px;
+      resize: none;
+      border-radius: 18px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.03);
+      color: var(--text);
+      padding: 10px 12px;
+      font-size: 13px;
+      outline:none;
+      line-height: 1.35;
+    }
+    .textarea::placeholder{color: rgba(255,255,255,.45)}
+    .send{
+      width: 46px; height: 46px;
+      border-radius: 18px;
+      border: 1px solid rgba(124,77,255,.45);
+      background: linear-gradient(135deg, rgba(124,77,255,.35), rgba(34,211,238,.15));
+      color: var(--text);
+      cursor:pointer;
+      transition: transform .12s ease, filter .12s ease;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-shrink: 0;
+    }
+    .send:hover{transform: translateY(-1px); filter: brightness(1.05)}
+    .send:active{transform: translateY(0px)}
+    .send:disabled{opacity:.5; cursor:not-allowed}
+
+    .statusBar{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items:center;
+      justify-content:space-between;
+      border: 1px solid var(--stroke);
+      border-radius: 18px;
+      background: rgba(255,255,255,.03);
+      padding: 10px 12px;
+    }
+    .statusLeft{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items:center;
+    }
+    .dot{
+      width: 8px; height: 8px;
+      border-radius: 99px;
+      background: rgba(255,255,255,.35);
+      box-shadow: 0 0 0 3px rgba(255,255,255,.05);
+    }
+    .dot.ok{background: var(--good)}
+    .dot.wait{background: var(--warn)}
+    .statusTxt{font-size: 12px; color: var(--muted)}
+    .kbd{
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.03);
+      border-radius: 10px;
+      padding: 6px 8px;
+      font-size: 12px;
+      color: var(--muted);
+      user-select:none;
+    }
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .hero{grid-template-columns: 1fr; }
+      .app{grid-template-columns: 1fr; }
+      .panel{min-height: 480px}
+      .brand{min-width:auto}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>Second Brain</h1>
+          <p>Carica • Cerca • Ricorda</p>
+        </div>
+      </div>
+
+      <div class="actions">
+        <div class="pill" title="Stato indicizzazione">
+          <span class="dot" id="idxDot"></span>
+          <span id="idxText">Nessun documento caricato</span>
+        </div>
+        <button class="btn primary" id="btnPick">
+          📄 Carica Word
+        </button>
+        <button class="btn danger" id="btnClear" title="Rimuove tutti i documenti e resetta la chat">
+          🗑️ Reset
+        </button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="heroCard">
+        <h2 class="heroTitle">Il tuo <span>secondo cervello</span>, in una pagina.</h2>
+        <p class="heroSub">
+          Carica uno o più file Word e fai domande come in chat.
+          Second Brain cerca nei documenti e ti riporta le parti rilevanti con le fonti.
+          (MVP front-end: ricerca testuale in locale.)
+        </p>
+        <div class="badgeRow">
+          <div class="badge">⚡ Estrazione testo .docx</div>
+          <div class="badge">🔎 Snippet + fonti</div>
+          <div class="badge">📱 Responsive</div>
+          <div class="badge">🧠 Base pronta per RAG/LLM</div>
+        </div>
+      </div>
+
+      <div class="heroCard">
+        <h2 class="heroTitle" style="font-size:18px;margin-bottom:10px">Tip veloci</h2>
+        <p class="heroSub" style="margin-bottom:10px">
+          Prova domande come:
+          <br>• “Dove si parla di <b>budget</b>?”
+          <br>• “Riassumi la parte su <b>processo</b>”
+          <br>• “Cosa dice sul <b>cliente</b>?”
+        </p>
+        <div class="statusBar">
+          <div class="statusLeft">
+            <span class="dot wait" id="readyDot"></span>
+            <span class="statusTxt" id="readyText">In attesa di documenti…</span>
+          </div>
+          <span class="kbd">Invio = invia • Shift+Invio = a capo</span>
+        </div>
+        <p class="hint" style="margin:10px 0 0">
+          Privacy: l’estrazione avviene nel browser. Nessun upload a server (in questa demo).
+        </p>
+      </div>
+    </section>
+
+    <main class="app">
+      <!-- LEFT: Upload + files -->
+      <section class="panel">
+        <div class="panelHeader">
+          <div>
+            <h2>Documenti</h2>
+            <small>Carica file Word (.docx)</small>
+          </div>
+          <div class="chip" id="docCounter">0 file</div>
+        </div>
+
+        <div class="panelBody">
+          <div class="dropzone" id="dropzone">
+            <div class="dropIcon" aria-hidden="true">⬆️</div>
+            <p class="dzTitle">Trascina qui i tuoi file Word</p>
+            <p class="dzSub">Oppure clicca per selezionare più documenti (.docx). I .doc non sono supportati.</p>
+            <div class="dzRow">
+              <label class="btn primary" for="fileInput">Seleziona file</label>
+              <button class="btn" id="btnDemo">Carica demo</button>
+            </div>
+            <p class="hint" id="uploadHint">Suggerimento: carica 2-3 documenti e poi fai una domanda mirata.</p>
+          </div>
+
+          <input id="fileInput" type="file" accept=".docx,.doc" multiple />
+
+          <div class="fileList" id="fileList" aria-label="Elenco documenti caricati">
+            <!-- items injected -->
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT: Chat -->
+      <section class="panel">
+        <div class="panelHeader">
+          <div>
+            <h2>Chat</h2>
+            <small>Fai domande ai tuoi documenti</small>
+          </div>
+          <div class="chip good" id="modeChip">Ricerca locale</div>
+        </div>
+
+        <div class="panelBody chatWrap">
+          <div class="chat" id="chat" aria-label="Chat">
+            <!-- messages injected -->
+          </div>
+        </div>
+
+        <div class="composer">
+          <textarea id="question" class="textarea" placeholder="Scrivi una domanda… (es: 'Dove si parla di budget?')"></textarea>
+          <button class="send" id="sendBtn" title="Invia">
+            ➤
+          </button>
+        </div>
+      </section>
+    </main>
+
+  </div>
+
+  <!-- Mammoth.js (DOCX -> text) -->
+  <script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
+
+  <script>
+    /**
+     * Second Brain — MVP front-end
+     * - Carica .docx
+     * - Estrae testo (mammoth)
+     * - Ricerca keyword con snippet e fonti
+     */
+
+    const el = {
+      fileInput: document.getElementById("fileInput"),
+      dropzone: document.getElementById("dropzone"),
+      fileList: document.getElementById("fileList"),
+      docCounter: document.getElementById("docCounter"),
+      btnPick: document.getElementById("btnPick"),
+      btnClear: document.getElementById("btnClear"),
+      btnDemo: document.getElementById("btnDemo"),
+      chat: document.getElementById("chat"),
+      question: document.getElementById("question"),
+      sendBtn: document.getElementById("sendBtn"),
+      idxDot: document.getElementById("idxDot"),
+      idxText: document.getElementById("idxText"),
+      readyDot: document.getElementById("readyDot"),
+      readyText: document.getElementById("readyText"),
+    };
+
+    /** In-memory “index” */
+    const state = {
+      docs: [], // {id, name, size, text, addedAt, warnings:[]}
+      nextId: 1
+    };
+
+    function fmtBytes(bytes){
+      const units = ["B","KB","MB","GB"];
+      let i=0, n=bytes;
+      while(n>=1024 && i<units.length-1){ n/=1024; i++; }
+      return `${n.toFixed(n>=10 || i===0 ? 0 : 1)} ${units[i]}`;
+    }
+
+    function setStatus(){
+      const n = state.docs.length;
+      el.docCounter.textContent = `${n} ${n===1 ? "file" : "file"}`;
+      if(n===0){
+        el.idxDot.className = "dot";
+        el.idxText.textContent = "Nessun documento caricato";
+        el.readyDot.className = "dot wait";
+        el.readyText.textContent = "In attesa di documenti…";
+        el.sendBtn.disabled = true;
+      } else {
+        el.idxDot.className = "dot ok";
+        el.idxText.textContent = `Indicizzati: ${n} documenti`;
+        el.readyDot.className = "dot ok";
+        el.readyText.textContent = "Pronto: fai una domanda";
+        el.sendBtn.disabled = false;
+      }
+    }
+
+    function addMessage(role, text, extraHtml = ""){
+      const div = document.createElement("div");
+      div.className = `msg ${role}`;
+      div.innerHTML = escapeHtml(text) + extraHtml;
+      el.chat.appendChild(div);
+      el.chat.scrollTop = el.chat.scrollHeight;
+    }
+
+    function escapeHtml(str){
+      return (str ?? "").toString()
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;")
+        .replaceAll("\n","<br>");
+    }
+
+    function highlightSnippet(snippet, tokens){
+      let out = snippet;
+      // Escape first, then highlight using a safe approach.
+      out = escapeHtml(out).replaceAll("<br>","\n"); // internal
+      tokens.forEach(t=>{
+        if(!t) return;
+        const re = new RegExp(`(${escapeRegExp(t)})`, "ig");
+        out = out.replace(re, "<mark>$1</mark>");
+      });
+      return out.replaceAll("\n","<br>");
+    }
+
+    function escapeRegExp(s){
+      return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+
+    /** Render docs list */
+    function renderFiles(){
+      el.fileList.innerHTML = "";
+      if(state.docs.length === 0){
+        const empty = document.createElement("div");
+        empty.className = "hint";
+        empty.textContent = "Nessun documento caricato. Usa l’area sopra per aggiungere file .docx.";
+        el.fileList.appendChild(empty);
+        return;
+      }
+
+      state.docs.forEach(doc=>{
+        const item = document.createElement("div");
+        item.className = "fileItem";
+
+        const left = document.createElement("div");
+        left.className = "fileMeta";
+
+        const name = document.createElement("p");
+        name.className = "fileName";
+        name.title = doc.name;
+        name.textContent = doc.name;
+
+        const info = document.createElement("p");
+        info.className = "fileInfo";
+        const textLen = doc.text ? doc.text.length : 0;
+        const approxWords = doc.text ? Math.max(0, doc.text.trim().split(/\s+/).length) : 0;
+        info.textContent = `${fmtBytes(doc.size)} • ~${approxWords.toLocaleString("it-IT")} parole`;
+
+        left.appendChild(name);
+        left.appendChild(info);
+
+        const right = document.createElement("div");
+        right.style.display = "flex";
+        right.style.alignItems = "center";
+        right.style.gap = "8px";
+
+        const chip = document.createElement("span");
+        chip.className = "chip " + (doc.warnings.length ? "warn" : "good");
+        chip.textContent = doc.warnings.length ? "Attenzione" : "OK";
+
+        const del = document.createElement("button");
+        del.className = "miniBtn";
+        del.title = "Rimuovi documento";
+        del.textContent = "✕";
+        del.onclick = () => {
+          state.docs = state.docs.filter(d => d.id !== doc.id);
+          renderFiles();
+          setStatus();
+          systemNudge();
+        };
+
+        right.appendChild(chip);
+        right.appendChild(del);
+
+        item.appendChild(left);
+        item.appendChild(right);
+
+        el.fileList.appendChild(item);
+
+        if(doc.warnings.length){
+          const w = document.createElement("div");
+          w.className = "hint";
+          w.style.margin = "2px 0 10px 6px";
+          w.textContent = "• " + doc.warnings.join(" • ");
+          el.fileList.appendChild(w);
+        }
+      });
+    }
+
+    function systemNudge(){
+      // Add a helpful system message in chat depending on docs state.
+      if(state.docs.length === 0){
+        addMessage("ai",
+          "Ciao! Carica uno o più file Word (.docx) e poi chiedimi qualcosa.\nEsempio: “Dove si parla di budget?”"
+        );
+      } else if(el.chat.children.length === 0){
+        addMessage("ai",
+          "Perfetto. Ho indicizzato i documenti.\nOra fammi una domanda e ti riporto le parti rilevanti con le fonti."
+        );
+      }
+    }
+
+    /** Extract text from DOCX using Mammoth */
+    async function extractDocxText(file){
+      const arrayBuffer = await file.arrayBuffer();
+      const result = await mammoth.extractRawText({ arrayBuffer });
+      return (result.value || "").replace(/\u0000/g, "").trim();
+    }
+
+    /** Add documents from FileList */
+    async function addFiles(fileList){
+      const files = Array.from(fileList || []);
+      if(files.length === 0) return;
+
+      for(const file of files){
+        const ext = (file.name.split(".").pop() || "").toLowerCase();
+        const doc = {
+          id: state.nextId++,
+          name: file.name,
+          size: file.size,
+          addedAt: new Date(),
+          text: "",
+          warnings: []
+        };
+
+        if(ext === "doc"){
+          doc.warnings.push("Formato .doc non supportato in browser. Salva come .docx.");
+          state.docs.push(doc);
+          continue;
+        }
+        if(ext !== "docx"){
+          doc.warnings.push("Formato non riconosciuto. Usa .docx.");
+          state.docs.push(doc);
+          continue;
+        }
+
+        // UI feedback
+        addMessage("ai", `Sto leggendo: ${file.name}…`);
+
+        try{
+          doc.text = await extractDocxText(file);
+          if(!doc.text || doc.text.length < 20){
+            doc.warnings.push("Testo estratto molto breve (documento vuoto o complesso).");
+          }
+        } catch(err){
+          doc.warnings.push("Errore durante lettura .docx. Prova a ricaricare o semplificare il file.");
+          console.error(err);
+        }
+
+        state.docs.push(doc);
+      }
+
+      // Cleanup: remove loading messages? keep them; it's okay.
+      renderFiles();
+      setStatus();
+
+      // Suggest next action
+      addMessage("ai", "Done ✅ Documenti aggiornati. Ora puoi fare una domanda.");
+    }
+
+    /** Simple search: tokenize query, score matches per document, return top snippets */
+    function searchDocs(query){
+      const q = (query || "").trim();
+      if(!q) return { tokens: [], hits: [] };
+
+      // Tokenization: keep words >= 2 chars
+      const tokens = Array.from(new Set(
+        q.toLowerCase()
+          .replace(/[^\p{L}\p{N}\s]/gu, " ")
+          .split(/\s+/)
+          .map(t => t.trim())
+          .filter(t => t.length >= 2)
+      ));
+
+      const hits = [];
+
+      for(const doc of state.docs){
+        if(!doc.text) continue;
+        const textLower = doc.text.toLowerCase();
+
+        // Score by token frequency
+        let score = 0;
+        const positions = [];
+        for(const t of tokens){
+          let idx = textLower.indexOf(t);
+          while(idx !== -1){
+            score += 1;
+            positions.push(idx);
+            idx = textLower.indexOf(t, idx + t.length);
+          }
+        }
+        if(score === 0) continue;
+
+        // Build snippet around first match
+        positions.sort((a,b)=>a-b);
+        const first = positions[0];
+        const radius = 140;
+        const start = Math.max(0, first - radius);
+        const end = Math.min(doc.text.length, first + radius);
+        let snippet = doc.text.slice(start, end).trim();
+
+        // Add ellipses
+        if(start > 0) snippet = "… " + snippet;
+        if(end < doc.text.length) snippet = snippet + " …";
+
+        hits.push({
+          docId: doc.id,
+          name: doc.name,
+          score,
+          snippet
+        });
+      }
+
+      hits.sort((a,b)=>b.score - a.score);
+      return { tokens, hits: hits.slice(0, 4) }; // top 4 sources
+    }
+
+    function buildAiResponse(query){
+      if(state.docs.length === 0){
+        return {
+          text: "Prima carica almeno un documento .docx.\nPoi rifai la domanda 🙂",
+          sourcesHtml: ""
+        };
+      }
+
+      const { tokens, hits } = searchDocs(query);
+
+      if(tokens.length === 0){
+        return {
+          text: "Non riesco a capire cosa cercare. Scrivi una domanda con 1-2 parole chiave (es: “budget”, “processo”, “cliente”).",
+          sourcesHtml: ""
+        };
+      }
+
+      if(hits.length === 0){
+        return {
+          text: `Non ho trovato occorrenze per: ${tokens.join(", ")}.\nSuggerimento: prova sinonimi o termini più specifici.`,
+          sourcesHtml: ""
+        };
+      }
+
+      const summary = `Ho trovato riferimenti a: ${tokens.join(", ")}.\nEcco le parti più rilevanti nei documenti:`;
+      const sourcesHtml =
+        `<div class="sources">` +
+        hits.map(h => `
+          <div class="source">
+            <h4>
+              <span>📌 ${escapeHtml(h.name)}</span>
+              <span class="chip good" style="padding:5px 9px; font-size:11px;">score ${h.score}</span>
+            </h4>
+            <p>${highlightSnippet(h.snippet, tokens)}</p>
+          </div>
+        `).join("") +
+        `</div>
+        <span class="meta">Suggerimento: se vuoi una risposta “ragionata” (tipo chat AI), collega questa UI a un backend RAG.</span>`;
+
+      return { text: summary, sourcesHtml };
+    }
+
+    /** Events */
+    el.btnPick.addEventListener("click", () => el.fileInput.click());
+    el.fileInput.addEventListener("change", async (e) => {
+      await addFiles(e.target.files);
+      el.fileInput.value = "";
+    });
+
+    // Dropzone click -> open input
+    el.dropzone.addEventListener("click", (e) => {
+      // avoid triggering when clicking inside buttons/labels
+      const tag = (e.target.tagName || "").toLowerCase();
+      if(tag === "button" || tag === "label") return;
+      el.fileInput.click();
+    });
+
+    // Drag & drop
+    ["dragenter","dragover"].forEach(evt=>{
+      el.dropzone.addEventListener(evt, (e)=>{
+        e.preventDefault();
+        e.stopPropagation();
+        el.dropzone.classList.add("dragover");
+      });
+    });
+    ["dragleave","drop"].forEach(evt=>{
+      el.dropzone.addEventListener(evt, (e)=>{
+        e.preventDefault();
+        e.stopPropagation();
+        el.dropzone.classList.remove("dragover");
+      });
+    });
+    el.dropzone.addEventListener("drop", async (e)=>{
+      const dt = e.dataTransfer;
+      if(dt && dt.files && dt.files.length){
+        await addFiles(dt.files);
+      }
+    });
+
+    // Demo docs (fake text) to test without file
+    el.btnDemo.addEventListener("click", ()=>{
+      const demo1 = {
+        id: state.nextId++,
+        name: "Demo_Progetto_SecondBrain.docx",
+        size: 48234,
+        addedAt: new Date(),
+        warnings: [],
+        text: `
+Second Brain — Specifica MVP
+
+Obiettivo: creare un secondo cervello dell’utente. L’utente carica documenti Word e interagisce via chat.
+Funzionalità principali:
+- Upload multiplo dei .docx
+- Indicizzazione e ricerca nei contenuti
+- Restituzione di snippet con fonti
+- Layout responsive e semplice
+
+Nota: la versione avanzata prevede RAG con LLM (Azure OpenAI) e storage dei vettori.
+`.trim()
+      };
+
+      const demo2 = {
+        id: state.nextId++,
+        name: "Demo_Policy_Aziendali.docx",
+        size: 61202,
+        addedAt: new Date(),
+        warnings: [],
+        text: `
+Policy interne — Estratto
+
+Budget: ogni richiesta sopra i 5.000€ deve essere approvata dal responsabile.
+Processo: le richieste passano da analisi → approvazione → implementazione → verifica.
+Cliente: la comunicazione deve essere tracciata nel sistema e condivisa con il team.
+`.trim()
+      };
+
+      state.docs.push(demo1, demo2);
+      renderFiles();
+      setStatus();
+      addMessage("ai", "Ho caricato 2 documenti demo ✅ Ora puoi fare una domanda (es: “budget”, “processo”).");
+    });
+
+    // Reset
+    el.btnClear.addEventListener("click", ()=>{
+      state.docs = [];
+      state.nextId = 1;
+      el.chat.innerHTML = "";
+      renderFiles();
+      setStatus();
+      systemNudge();
+    });
+
+    // Send logic
+    function sendQuestion(){
+      const q = (el.question.value || "").trim();
+      if(!q) return;
+      el.question.value = "";
+      addMessage("user", q);
+
+      // Simulate thinking
+      setTimeout(()=>{
+        const { text, sourcesHtml } = buildAiResponse(q);
+        addMessage("ai", text, sourcesHtml);
+      }, 220);
+    }
+
+    el.sendBtn.addEventListener("click", sendQuestion);
+    el.question.addEventListener("keydown", (e)=>{
+      if(e.key === "Enter" && !e.shiftKey){
+        e.preventDefault();
+        sendQuestion();
+      }
+    });
+
+    // Init
+    setStatus();
+    renderFiles();
+    systemNudge();
+  </script>
+</body>
+</html>
